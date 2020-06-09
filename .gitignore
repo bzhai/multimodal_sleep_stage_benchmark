@@ -1,0 +1,5 @@
+__pycache__
+.idea
+ignore
+**/__pycache__
+**/.ipynb_checkpoints
