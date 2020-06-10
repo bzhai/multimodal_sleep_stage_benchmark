@@ -92,7 +92,9 @@ An example code is shown below for the sleep classification task of three-stage 
         
         python -m benchmarksleepstages.dl_probability_calculation --modality all --num_classes 3
  
-## Evaluation         
+## Evaluation
+The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics includes F1, accuracy, precision and recall for each classifier. Two types evaluation completed in our paper, they are epoch-wise and subject level evaluation.
+         
 * Epoch-wise evaluation
 
     The epoch-wised evaluation should be conducted for each task, modality and evaluation period (sleep recording period and sleep period). An example code is shown below for the 3-stage sleep classification task of three-stage that adopted combined modalities based on deep learning methods.
@@ -113,12 +115,5 @@ An example code is shown below for the sleep classification task of three-stage 
 An example code is shown below 
         
         python -m benchmarksleepstages.summary_shap_feature_importance --modality all --load_pretrain 0 --num_class 3
-
-## Summary of Experiment
-The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics includes F1, accuracy, precision and recall for each classifier.
-An example code is shown below
-    
-    python -m benchmarksleepstages.summary_of_experiment --modality all --num_classe 3
-
 
 
