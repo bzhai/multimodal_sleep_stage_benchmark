@@ -11,7 +11,7 @@ We have two environments for our paper.
 
 1. The first environment is used to build data sets and perform all deep learning experiments. TensorFlow version is 1.14 and python version is 3.7.3
 Please build all data sets based on this environment
-2. The second environment is only used for DL hyperparameter search of deep learning models. We use TensorFlow 2.0 version to complete the super parameter search。
+2. The second environment is only used for hyper-parameter search of deep learning models. We use TensorFlow 2.0 version to complete the super parameter search。
 
 The dataset can be obtained from the ([RR Interval data](https://sleepdata.org/datasets/mesa/files/polysomnography/annotations-rpoints])) and ([actigraphy data](https://sleepdata.org/datasets/mesa/files/actigraphy)) from ([MESA](https://sleepdata.org/datasets/mesa))
 Note: The RR interval is the time between QRS complexes which is also known as Inter-beat interval (IBI).
