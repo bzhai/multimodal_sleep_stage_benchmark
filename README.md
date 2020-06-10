@@ -13,10 +13,9 @@ We have two environments for our paper.
 Please build all data sets based on this environment
 2. The second environment is only used for hyper-parameter search of deep learning models. We use TensorFlow 2.0 version to complete the super parameter search。
 
-The dataset can be obtained from the ([RR Interval data](https://sleepdata.org/datasets/mesa/files/polysomnography/annotations-rpoints])) and ([actigraphy data](https://sleepdata.org/datasets/mesa/files/actigraphy)) from ([MESA](https://sleepdata.org/datasets/mesa))
-Note: The RR interval is the time between QRS complexes which is also known as Inter-beat interval (IBI).
-Setup the experiment directory and update sleep_stage_config.py with these settings.
-Here I present an example of the experiment directory structure and their values that should be mapped to Config:
+
+You may setup the experiment directory according to your experiment system.
+Here I present an example of the experiment directory structure and their values that should be mapped to `Config` in `sleep_stage_config.py` :
 ```bash
 └─experiment_root
     ├─actigraphy # It’s MESA Actigraphy data directory which maps to ACC_PATH
@@ -37,6 +36,9 @@ Here I present an example of the experiment directory structure and their values
 
 
 ## Build Dataset
+
+The dataset can be obtained from the ([RR Interval data](https://sleepdata.org/datasets/mesa/files/polysomnography/annotations-rpoints])) and ([actigraphy data](https://sleepdata.org/datasets/mesa/files/actigraphy)) from ([MESA](https://sleepdata.org/datasets/mesa))
+Note: The RR interval is the time between QRS complexes which is also known as Inter-beat interval (IBI).
 
 To simplify the reading of benchmark data, we wrote special classes. The following command takes Actigraphy and RRI data to build the dataset that used for the benchmarking experiments. It may take several hours to create the dataset.
 

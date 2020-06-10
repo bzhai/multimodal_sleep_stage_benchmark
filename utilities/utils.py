@@ -7,6 +7,7 @@ from sklearn.model_selection import GridSearchCV
 import json
 import itertools
 import pickle
+import time
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, roc_auc_score, recall_score
 from sklearn.metrics import average_precision_score
@@ -919,6 +920,39 @@ def weight_likelihood(likelihood, prior_prob):
     #posterior = posterior / np.linalg.norm(posterior)
     posterior = softmax(posterior)
     return posterior
+
+
+
+def load_h5_dataset(path):
+    start = time.time()
+    store = pd.HDFStore(path, 'r')
+    df_train = store["train"]
+    df_test = store["test"]
+    feature_name = store["featnames"].values.tolist()
+    if type(feature_name[0]) is list:
+        feature_name = list(itertools.chain.from_iterable(feature_name))
+    store.close()
+    print("loading dataset spend : %s" % time.strftime("%H:%M:%S", time.gmtime(time.time() - start)))
+    return df_train, df_test, feature_name
+
+
+def load_h5_df_dataset(path):
+    """
+    This function needs to be removed, it's a part of data loader
+    """
+    feature_name = []
+    start = time.time()
+    store = pd.HDFStore(path, 'r')
+    dftrain = store["train"]
+    dftest = store["test"]
+
+    feature_name = store["featnames"].values.tolist()
+    if type(feature_name[0]) is list:
+        feature_name = list(itertools.chain.from_iterable(feature_name))
+    store.close()
+    print("loading dataset spend : %s" % time.strftime("%H:%M:%S", time.gmtime(time.time() - start)))
+    return dftrain, dftest, feature_name
+
 
 def split_df_to_individual_file(df, folder_path):
     for pid in df.mesaid.unique().tolist():

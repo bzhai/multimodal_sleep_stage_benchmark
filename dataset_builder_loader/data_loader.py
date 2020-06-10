@@ -8,9 +8,9 @@ from sklearn import preprocessing
 from random import seed
 from random import shuffle
 import h5py
-from dataset_builder_loader.make_h5py_file import *
-from sleep_stage_config import Config
 
+from sleep_stage_config import Config
+from utilities.utils import *
 from sklearn.model_selection import train_test_split
 
 
