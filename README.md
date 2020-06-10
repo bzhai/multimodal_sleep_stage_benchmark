@@ -9,10 +9,9 @@ Here we present four public benchmarks for machine learning researchers interest
 
 We have two environments for our paper.
 
-1. The environment was used to conduct all deep learning experiments the TensorFlow version is 1.14 python 3.7.3
-Please build all dataset based on this environment
-2. The environment was used to conduction the hyperparameter tuning for deep learning models. We use TensorFlow with version 2.2
-Building a benchmark
+1. The first environment is used to build data sets and perform all deep learning experiments. TensorFlow version is 1.14 and python version is 3.7.3
+Please build all data sets based on this environment
+2. The second environment is only used for DL hyperparameter search of deep learning models. We use TensorFlow 2.0 version to complete the super parameter search。
 
 The dataset can be obtained from the ([RR Interval data](https://sleepdata.org/datasets/mesa/files/polysomnography/annotations-rpoints])) and ([actigraphy data](https://sleepdata.org/datasets/mesa/files/actigraphy)) from ([MESA](https://sleepdata.org/datasets/mesa))
 Note: The RR interval is the time between QRS complexes which is also known as Inter-beat interval (IBI).
