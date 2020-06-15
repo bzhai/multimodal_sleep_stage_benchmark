@@ -3,7 +3,7 @@ Movement and Cardiac Sensing Based Sleep Stages Classification
 
 Despite rapid growth in research that applies machine learning to sleep data, progress in the field appears far less dramatic than in other applications of machine learning.
 Sleep data sets are inherently expensive and difficult to obtain and are usually relatively small compared to consumer industry data sets. Often, these data are not open to researchers outside the data owner’s institution.
-Here we present four public benchmarks for machine learning researchers interested in sleep medicine research, built using data from the publicly available Multi-Ethnic Study of Atherosclerosis ([paper 1](https://www.ncbi.nlm.nih.gov/pubmed/27070134), [paper 2](https://www.ncbi.nlm.nih.gov/pubmed/29860441) [MESA Dataset]( https://sleepdata.org/datasets/mesa)). Our four clinical prediction tasks are binary sleep-wake classification and multistage classification that were described in [Bing et al., 2020]():
+Here we present four public benchmarks for machine learning researchers interested in sleep medicine research, built using data from the publicly available Multi-Ethnic Study of Atherosclerosis ([paper 1](https://www.ncbi.nlm.nih.gov/pubmed/27070134), [paper 2](https://www.ncbi.nlm.nih.gov/pubmed/29860441) [MESA Dataset]( https://sleepdata.org/datasets/mesa)). Our four clinical prediction tasks are binary sleep-wake classification and multistage classification that were described in a copy of [pre-print paper]() in this repository:
 
 ## Environment Requirement
 

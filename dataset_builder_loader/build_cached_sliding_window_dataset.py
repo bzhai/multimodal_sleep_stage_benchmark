@@ -19,9 +19,10 @@ def parse_arguments(argv):
     parser.add_argument('--num_classes', type=int, default=3, help='number of classes or labels',
                         choices={2, 3, 4, 5})
     parser.add_argument('--seq_len', type=int, default=20, help='number of classes or labels',
-                        choices={20 ,50, 100})
+                        choices={20, 50, 100})
     return parser.parse_args(argv)
 
 
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
+

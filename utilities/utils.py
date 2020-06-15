@@ -36,6 +36,7 @@ def load_tf_model(model_path=''):
         print(sess.run('w1:0'))
         return sess
 
+
 def get_all_files_include_sub(path, file_type):
     files = []
     # r=root, d=directories, f = files
@@ -71,9 +72,9 @@ def plot_train_history(history, title):
 
   plt.show()
 
+
 def standardize_df_given_feature(df, features=[], scaler=None, df_name="", simple_method=True):
     assert len(features) > 0, print("feature length must greater than 0")
-    scaler_dic ={}
     # check if the df contains nan or inf
     if simple_method:
         print("pre-processing dataset frame using simple method")
@@ -107,34 +108,6 @@ def standardize_df_given_feature(df, features=[], scaler=None, df_name="", simpl
     return scaler
 
 
-def extract_x_y_new(df, seq_len, mesaid, label_posi='mid', feature=""):
-    df_x = df[df["mesaid"] == mesaid][[feature, "stages"]].copy()
-    y = df_x["stages"].astype(int).values  # get the ground truth for y
-    del df_x["stages"]
-    if label_posi == 'mid':
-        if seq_len % 2 == 0:  # even win_len
-            fw_end = int(np.ceil(seq_len / 2))
-            bw_end = int(np.floor(seq_len / 2))
-            fw_start_idx = 1
-        else:
-            fw_end = int(np.round(seq_len / 2))
-            bw_end = int(np.round(seq_len / 2))
-            fw_start_idx = 0
-
-        for s in range(fw_start_idx, fw_end):
-            df_x["shift_%d" % s] = df_x[feature].shift(s)
-        # as half of the sliding window has reversed order (these df columns)
-        columns = df_x.columns.tolist()
-        columns = columns[::-1]  # or data_frame = data_frame.sort_index(ascending=True, axis=0)
-        df_x = df_x[columns]
-        for s in range(0, bw_end):
-            df_x["shift_-%d" % s] = df_x[feature].shift(-s)
-    else:
-        for s in range(1, seq_len):
-            df_x["shift_%d" % s] = df_x["activity"].shift(s)
-    x = df_x.fillna(-1).values
-    return x, y
-
 def extract_x_y(df, seq_len, mesaid, label_posi='mid', feature=""):
     df_x = df[df["mesaid"] == mesaid][[feature, "stages"]].copy()
     y = df_x["stages"].astype(int).values  # get the ground truth for y
@@ -144,7 +117,7 @@ def extract_x_y(df, seq_len, mesaid, label_posi='mid', feature=""):
             df_x["shift_%d" % s] = df_x[feature].shift(s)
         # as half of the sliding window has reversed order (these df columns)
         columns = df_x.columns.tolist()
-        columns = columns[::-1] # or data_frame = data_frame.sort_index(ascending=True, axis=0)
+        columns = columns[::-1]  # or data_frame = data_frame.sort_index(ascending=True, axis=0)
         df_x = df_x[columns]
         for s in range(1, round(seq_len/2) + 1):
             df_x["shift_-%d" % s] = df_x[feature].shift(-s)
@@ -163,7 +136,7 @@ def get_data(df, seq_len, feature_list):
         mesaids = df.mesaid.unique()
         print("Processing feature : %s" % feature)
         x, y = extract_x_y(df, seq_len, mesaids[0], label_posi='mid', feature=feature)
-        #for i in tqdm(range(users_both.shape[0])):
+
         for mid in tqdm(mesaids[1:], position=0, leave=True, bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.WHITE, Fore.RESET),
                    desc='Process..'):
             x_tmp, y_tmp = extract_x_y(df, seq_len, mid, label_posi='mid', feature=feature)
@@ -179,8 +152,6 @@ def standardize_features_to_array(df, scalers = None):
     """
     This function will scale the dataset set use SK learn scaler function however we recommend do not pass a feature list
     to the function as it may difficult to save the scaler list into H5py file
-    # fixme: need complete the code for the feature list, need return a scaler that was train from training dataset
-    # fixme: can be used for test dataset.
     :param df:
     :param features:
     :param scaler:
@@ -221,7 +192,6 @@ def get_csv_files(data_path):
     return csv_files
 
 
-# TODO add argument that add the modality name in column name
 def get_statistic_feature(df, column_name, windows_size=20):
     """
     the function will directly change input argument dataset frame, so the argument isn't immutable
@@ -381,7 +351,6 @@ def log_print_inference(y_test, yhat, label_value, target_names, epochs=0, tenso
     """
     Log inference results to tensor board path, we can track each experiment prediction result include accuracy, recall,
     precision, F1 score, F1 report, confusion matrix and confusion matrix in picture format.
-    TODO: need add specificity, sensitivity, PPV, also we need log the args
     :param args:
     :param file_title:
     :param y_test:
@@ -394,8 +363,6 @@ def log_print_inference(y_test, yhat, label_value, target_names, epochs=0, tenso
     """
     if args is not None:
         write_arguments_to_file(args, os.path.join(tensor_board_path, file_title + "_args.csv"))
-
-
     if len(y_test.shape) > 2:
         y_test = np.reshape(y_test, -1)
     accuracy = accuracy_score(y_test, yhat)
@@ -426,26 +393,6 @@ def log_print_inference(y_test, yhat, label_value, target_names, epochs=0, tenso
     normal_path = plot_save_confusion_matrix(y_test, yhat, normalize=True, class_names=target_names,
                                              location=tensor_board_path, title=file_title)
     return [normal_path]
-
-
-# def log_print_metrics(y_pred, y_test,epochs, NUM_STAGES, ag, tensorboard_path):
-#     yhat_classes = np.argmax(y_pred, axis=-1)
-#     # Y_test_classes = np.reshape(y_test, (-1, 2))
-#     Y_test_classes = np.argmax(y_test, axis=-1)
-#     if NUM_STAGES == 5:
-#         label_values = [0, 1, 2, 3, 4]
-#         target_names = ['wake', 'N1', 'N2', 'N3', 'REM']
-#     elif NUM_STAGES == 4:
-#         label_values = [0, 1, 2, 3]
-#         target_names = ['wake', 'light', 'deep', 'REM']
-#     elif NUM_STAGES == 3:
-#         label_values = [0, 1, 2]
-#         target_names = ['wake', 'non-rem', 'rem']
-#     else:
-#         label_values = [0, 1]
-#         target_names = ['wake', 'sleep']
-#     log_print_inference(Y_test_classes, yhat_classes, label_value=label_values, target_names=target_names,
-#                         epochs=epochs, tensor_board_path=tensorboard_path, file_title="dl_exp_", arg=ag)
 
 
 def plot_pr_re_curve(y_true, y_prob, save_path=None):
@@ -500,26 +447,6 @@ def plot_roc_curve(y_true, y_prob, save_path=None):
         return _save_path
     return ''
 
-
-def plot_roc_curve2(fpr, tpr, thresholds):
-    plt.figure()
-    plt.plot(fpr, tpr, color='darkorange', label='ROC curve (area = %0.2f)' % metrics.auc(fpr, tpr))
-    plt.plot([0, 1], [0, 1], color='navy', linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.legend(loc="lower right")
-
-    # create the axis of thresholds (scores)
-    ax2 = plt.gca().twinx()
-    ax2.plot(fpr, thresholds, markeredgecolor='r', linestyle='dashed', color='r')
-    ax2.set_ylabel('Threshold', color='r')
-    ax2.set_ylim([thresholds[-1], thresholds[0]])
-    ax2.set_xlim([fpr[0], fpr[-1]])
-
-    plt.savefig('roc_and_threshold.png')
-    plt.close()
 
 
 def calculate_roc(thresholds, embeddings1, embeddings2, actual_issame, nrof_folds=10):
@@ -767,7 +694,6 @@ def get_pid_from_file(file_list, start_pos, end_pos):
     return pid
 
 
-
 def make_eight_classes(df):
     # we have eight combinations 000, 010,100, 110, 001, 011, 111, 101,
     if type(df) is not pd.core.frame.DataFrame or type(df) is pd.core.frame.Series:
@@ -780,35 +706,17 @@ def make_eight_classes(df):
     df['eight_gt'] = df['eight_gt'].map(eight_classes).fillna(0)
     return df['eight_gt'].values.tolist()
 
+
 def convert_eight_classes_to_label(pred):
     eight_classes = {'000': 0, '010': 1, '100': 2, '110': 3, '001': 4, '011': 5, '111': 6, '101': 7}
     convert_dict = dict((v,k) for k,v in eight_classes.items())
     results = [convert_dict[x] for x in pred]
     return results
 
+
 def print_args(args):
     print("args used for this experiment \n")
     print(args)
-
-
-
-
-#!TODO this function need modify or delete
-# def calculate_transition_prob(df):
-#     prob_df = df[['mesaid','linetime', 'stages']].copy(deep=True)
-#     del df
-#
-#     prob_df['time_minus_1'] = prob_df.groupby('mesaid')['stages'].shift(-1).fillna(0)
-#     prob_df['stages'] = prob_df['stages'].astype(int)
-#     prob_df['time_minus_1'] = prob_df['time_minus_1'].astype(int)
-#     total_task_prob = pd.DataFrame()
-#     for i in np.arange(2,6):
-#         tmp_df = prob_df.copy(deep=True)
-#         tmp_df['stages'] = tmp_df['stages'].apply(lambda x: cast_sleep_stages(x, i))
-#         tmp_df['time_minus_1'] = tmp_df['time_minus_1'].apply(lambda x: cast_sleep_stages(x, i))
-#         transition = pd.crosstab(pd.Series(tmp_df['time_minus_1'], name='future'), pd.Series(tmp_df['stages'], name='current'),normalize=1)
-#         transition = transition.reset_index(drop=True)
-#         transition.to_csv('c:/tmp/%d_stages_transition_matrix_fast_stages_trans.csv' %i)
 
 
 def get_nndf(folder, nn_type, feature_type, num_classes, modality, hrv_win_len, base_columns=['mesaid', 'linetime', 'activity', 'stages', 'gt_sleep_block']):
@@ -842,14 +750,10 @@ def get_nndf(folder, nn_type, feature_type, num_classes, modality, hrv_win_len, 
         merged = pd.merge(result[0], result[1], left_index=True, right_index=True) #left_index=True, right_index=True
         for i in range(2, len(result)):
             merged = pd.merge(merged, result[i], left_index=True, right_index=True)
-        #base_columns_merged = [x + '_x' for x in base_columns]
         all_merged_columns = base_columns + nn_pred_columns
-        # column_map = {}
-        # for i in [base_columns]:
-        #     column_map.update({base_columns_merged[i]: base_columns[i]})
         merged = merged[all_merged_columns]
-        #merged = merged.rename(columns=column_map)
         return merged, nn_pred_columns
+
 
 def get_nns(folder, num_classes, modality, feature_type, hrv_win_len, nns=['LSTM', 'CNN'], base_columns=['mesaid', 'linetime', 'activity', 'gt_sleep_block', 'stages']):
     """
@@ -874,6 +778,7 @@ def get_nns(folder, num_classes, modality, feature_type, hrv_win_len, nns=['LSTM
         merged['stages'] = merged['stages'].apply(lambda x: cast_sleep_stages(x, classes=num_classes))
     return merged
 
+
 def calc_transition_probability(df, num_classes):
     df['time_minus_1'] = df.groupby('mesaid')['stages'].shift(-1).fillna(0)
     df['stages'] = df['stages'].apply(lambda x: cast_sleep_stages(x, num_classes))
@@ -885,11 +790,13 @@ def calc_transition_probability(df, num_classes):
     transition = transition.reset_index(drop=True)
     return transition
 
+
 def re_calc_posterior(likelihood, prior_prob):
     vec_prob = np.array(prior_prob)
     posterior = np.multiply(np.array(likelihood), vec_prob)
     posterior = posterior / np.linalg.norm(posterior)
     return posterior
+
 
 def exp_decay(df, beta=0.2, num_classes=3):
     print("beta value is :%2f" % beta)
@@ -920,7 +827,6 @@ def weight_likelihood(likelihood, prior_prob):
     #posterior = posterior / np.linalg.norm(posterior)
     posterior = softmax(posterior)
     return posterior
-
 
 
 def load_h5_dataset(path):
@@ -959,6 +865,7 @@ def split_df_to_individual_file(df, folder_path):
         tmp_df = df[df['mesaid']==pid]
         tmp_df.to_csv(os.path.join(folder_path, "%d_post_processing_prob_sample.csv" % pid))
 
+
 def arg_max_pred(df):
     tmp = df.to_numpy()
     pred = np.argmax(tmp)
@@ -991,6 +898,7 @@ def plot_pid(tmp, path_to_save, title_content, nntype, show):
     if not show:
         plt.close()
 
+
 def datetime_arange(start_datetime, end_datetime, step):
     """
 
@@ -1005,6 +913,7 @@ def datetime_arange(start_datetime, end_datetime, step):
         result.append(dt.strftime('%Y-%m-%d %H:%M:%S'))
         dt += step
     return result
+
 
 class CsvFileMerger(object):
     """
