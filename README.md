@@ -1,5 +1,6 @@
 Movement and Cardiac Sensing Based Sleep Stages Classification
 =========================
+[![Gitter](https://badges.gitter.im/multi-modality_sleep_monitoring/community.svg)](https://gitter.im/multi-modality_sleep_monitoring/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Despite rapid growth in research that applies machine learning to sleep data, progress in the field appears far less dramatic than in other applications of machine learning.
 Sleep data sets are inherently expensive and difficult to obtain and are usually relatively small compared to consumer industry data sets. Often, these data are not open to researchers outside the data owner’s institution.
