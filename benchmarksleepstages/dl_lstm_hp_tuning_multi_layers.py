@@ -1,6 +1,4 @@
 import logging
-from utilities.utils import log_print_inference
-from sklearn.model_selection import train_test_split
 from utilities.utils import *
 from datetime import datetime
 import random
@@ -17,11 +15,8 @@ from sleep_stage_config import Config
 from dataset_builder_loader.data_loader import DataLoader
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 tf.get_logger().setLevel(logging.ERROR)
-# set this TensorFlow session as the default session for Keras
 
-# #################### Ben track settings######################################################
-# EXPERIMENT = "Use raw dataset of HR and accelerometer for sleep stage classification "
-# The code in this program is to
+
 EXPERIMENT = "Use Activity alone with CNN model "
 SETTINGS = "1 CNN network with sleep-wake raw cache"
 flags.DEFINE_integer("num_session_groups", 30, "The approximate number of session groups to create.", )
@@ -241,7 +236,6 @@ def run_all_random_search(cfg, verbose=True):
 
 
 def main(unused_argv):
-    # shutil.rmtree()
     cfg = Config()
     init_gpu_setting()
     print("Tuning parameters for multiple layers CNN")

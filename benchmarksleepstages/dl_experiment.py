@@ -1,7 +1,7 @@
 import os
 import sys
 import argparse
-from dataset_builder_loader.make_h5py_file import *
+from utilities.utils import *
 from sleep_stage_config import Config
 from dataset_builder_loader.data_loader import DataLoader
 from benchmarksleepstages.models.dl_models import *

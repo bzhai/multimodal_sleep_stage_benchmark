@@ -4,17 +4,13 @@ from scipy.special import softmax
 from scipy.stats import ttest_ind
 from sklearn.model_selection import KFold
 from sklearn.model_selection import GridSearchCV
-import json
 import itertools
 import pickle
 import time
-import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, roc_auc_score, recall_score
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import accuracy_score, classification_report, cohen_kappa_score, roc_curve, precision_recall_curve
-from sklearn.utils.multiclass import unique_labels
 from datetime import datetime
-import sklearn.metrics as metrics
 from mlxtend.plotting import plot_confusion_matrix as mlxtend_plot_confusion_matrix
 from mlxtend.evaluate import confusion_matrix as mlxtend_confusion_matrix
 import numpy as np
@@ -27,6 +23,25 @@ from colorama import Fore
 from inspect import signature
 from sklearn.preprocessing import StandardScaler
 
+
+
+def plot_bar_group_paper(total_df, metrics, win_len, output_path):
+    # https://seaborn.pydata.org/tutorial/color_palettes.html
+    for metric in metrics:
+        c_palette = sns.color_palette("colorblind", len(total_df.Algorithms.unique()))
+        rank = total_df[metric].argsort().argsort()
+        sns.set_context("paper")
+        sns.set_style("whitegrid")
+        g = sns.catplot(x="tasks", y=metric, hue="Algorithms", kind="bar", height=8, legend_out=False
+                    , data=total_df[['Algorithms', 'tasks', metric]], palette=c_palette)
+        g.set(xlabel='Tasks and classifiers')
+        g.set(ylim=(15, 100))
+        plt.savefig(os.path.join(output_path, metric + "_%ds_" % win_len + ".png"), dpi=200)
+
+
+def split_and_extract(x, index):
+    t1 = x.split('+-')
+    return float(t1[0])
 
 def load_tf_model(model_path=''):
     import tensorflow as tf
@@ -588,6 +603,7 @@ def convert_args_to_str(args):
         string += str(key.name) + "=" + str(value) + ","
     return string
 
+
 def zero_leading_int(digits, length):
     assert isinstance(digits, int)
     to_fill = length - len(str(digits))
@@ -677,6 +693,7 @@ def convert_int_to_label(num_classes):
     elif num_classes == 5:
         return {'0': "Wake", '1': "N1 sleep", '2': "N2 sleep", '3': "N3 sleep", '4': "REM sleep"}
 
+
 def convert_int_to_label_list(num_classes):
     if num_classes == 2:
         return ["Wake", "Sleep"]
@@ -686,6 +703,7 @@ def convert_int_to_label_list(num_classes):
         return ["Wake", "Light sleep", "Deep sleep", "REM sleep"]
     elif num_classes == 5:
         return ["Wake", "N1 sleep", "N2 sleep", "N3 sleep", "REM sleep"]
+
 
 def get_pid_from_file(file_list, start_pos, end_pos):
     pid = []
@@ -990,19 +1008,19 @@ def save_GridSearchCV_csv(file_path, gridcv, sleep_stages):
     cv_param_df = pd.DataFrame.from_dict(cv_param_scores)
     cv_param_df.to_csv(os.path.join(file_path, ("%d_stages_cv_result.csv" % sleep_stages)), index=False)
 
+
 def ensemble_max_clfs(pred_val, num_clfs, num_classes):
     max_matrix = pred_val.reshape(pred_val.shape[0], num_clfs, num_classes)
     max_matrix = np.amax(max_matrix, axis=1)
     max_matrix = np.argmax(max_matrix, axis=1)
     return max_matrix
 
+
 def ensemble_mean_clfs(pred_val, num_clfs, num_classes):
     max_matrix = pred_val.reshape(pred_val.shape[0], num_clfs, num_classes)
     max_matrix = np.mean(max_matrix, axis=1)
     max_matrix = np.argmax(max_matrix, axis=1)
     return max_matrix
-
-
 
 
 def save_prediction_results(df_test, pred, pred_path, nn_type, seq_len):
@@ -1035,6 +1053,7 @@ def log_print_metrics(y_pred, y_test, epochs, nn_type, num_classes, tensorboard_
         target_names = ['Wake', 'Sleep']
     log_print_inference(Y_test_classes, yhat_classes, label_value=label_values, target_names=target_names,
                         epochs=epochs, tensor_board_path=tensorboard_path, file_title="dl_exp_%s" % nn_type, args=ag)
+
 
 def load_pre_splited_train_test_ids(path):
     df = pd.read_csv(path)

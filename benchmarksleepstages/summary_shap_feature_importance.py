@@ -78,7 +78,6 @@ def main(args):
                             4: mcolors.CSS4_COLORS['skyblue']}
             return class_colors[idx]
         shap.summary_plot(shap_values, X, plot_type='bar', class_names=labels, color=class_color, max_display=40)
-    # shap.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :])
 
     print("Feature importance ranking is completed")
     print("")

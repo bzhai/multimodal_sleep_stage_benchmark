@@ -1,7 +1,7 @@
 import sys
 import argparse
 from sleep_stage_config import Config
-#from scipy.stats import ttest_ind
+
 from utilities.utils import *
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,7 +11,7 @@ def main(args):
     default_ml = ["Random_forest_300"]
     default_nn = ["CNN_20_ENMO_HRV", "CNN_50_ENMO_HRV", "CNN_100_ENMO_HRV", "LSTM_20_ENMO_HRV", "LSTM_50_ENMO_HRV",
                  "LSTM_100_ENMO_HRV"]
-    # defaultnn = [x + "_" + args.feature_type for x in defaultnn]
+
     algs = default_nn + default_ml
     feature_to_modality = {'ENMO_HRV':'all', 'ENMO':'acc', 'HRV':'hrv'}
     total_df = [] # will load the prediction summary file
@@ -53,30 +53,6 @@ def main(args):
     alg_readable = dict(zip(alg_readable.Old_Name, alg_readable.New_Name))
     total_df['Algorithms'] = total_df['Algorithms'].apply(lambda x: alg_readable[x])
     plot_bar_group_paper(total_df, metrics, args.hrv_win_len, cfg.EXPERIMENT_RESULTS_ROOT_FOLDER)
-
-
-def plot_bar_group_paper(total_df, metrics, win_len, output_path):
-    # https://seaborn.pydata.org/tutorial/color_palettes.html
-    for metric in metrics:
-        c_palette = sns.color_palette("colorblind", len(total_df.Algorithms.unique()))
-        rank = total_df[metric].argsort().argsort()
-        sns.set_context("paper")
-        sns.set_style("whitegrid")
-        g = sns.catplot(x="tasks", y=metric, hue="Algorithms", kind="bar", height=8, legend_out=False
-                    , data=total_df[['Algorithms', 'tasks', metric]], palette=c_palette)
-        g.set(xlabel='Tasks and classifiers')
-        g.set(ylim=(15, 100))
-        plt.savefig(os.path.join(output_path, metric + "_%ds_" % win_len + ".png"), dpi=200)
-
-
-
-def plot_scatter_plot(hp_df, title=""):
-    print("print is completed.")
-
-
-def split_and_extract(x, index):
-    t1 = x.split('+-')
-    return float(t1[0])
 
 
 def parse_arguments(argv):

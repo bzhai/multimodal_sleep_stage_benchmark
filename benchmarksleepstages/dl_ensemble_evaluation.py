@@ -13,12 +13,6 @@ config.log_device_placement = False  # to log device placement (on which device 
 sess = tf.Session(config=config)
 set_session(sess)  # set this TensorFlow session as the default session for Keras
 
-# #################### Ben track settings######################################################
-# EXPERIMENT = "Use raw dataset of HR and accelerometer for sleep stage classification "
-# The code in this program is to
-# EXPERIMENT = "Use Activity alone with CNN model "
-# SETTINGS = "1 CNN network with sleep-wake raw cache"
-
 time_of_run = datetime.now().strftime("%Y%m%d-%H%M%S")
 logdir_root = os.path.join(os.getcwd(), "experiment_results", os.path.basename(__file__))
 tensorboard_path = os.path.join(logdir_root, time_of_run)
@@ -31,9 +25,6 @@ def main(args):
     print_args(args)
     np.random.seed(42)
     cfg = Config()
-    # h5_file = globals()["HRV%d_ACC_STD_PATH" % args.hrv_win_len]
-    # print("Loading test dataset from %s" % h5_file)
-    #dftrain, dftest, featnames = load_h5_df_dataset(h5_file, useCache=True)
     feature_type = cfg.FEATURE_TYPE_DICT[args.modality]
     stage_output_folder = globals()["STAGE_OUTPUT_FOLDER_HRV%ds" % args.hrv_win_len]
     predicted_prob = "%d_stages_%s_%ds_pred_probability_%s.csv" % (args.num_classes, args.prediction_type,
@@ -56,17 +47,11 @@ def main(args):
     clfs_df["max_ensemble"] = np.argmax(max_matrix, axis=1)
     mean_matrix = np.mean(prob_matrix, axis=1)
     clfs_df["mean_ensemble"] = np.argmax(mean_matrix, axis=1)
-    # additive_matrix = np.sum(prob_matrix, axis=1)
-    # clfs_df["additive_ensemble"] = np.argmax(additive_matrix, axis=1)
-    # multiplicative_matrix = np.prod(prob_matrix, axis=1)
-    # clfs_df["multiplicative_ensemble"] = np.argmax(multiplicative_matrix, axis=1)
-    # ##########these are the old slow method #############
-    # clfs_df['mean_ensemble'] = clfs_df[alg_prob_columns].apply(lambda x: cross_clf_mean(x, args.num_classes), axis=1)
-    # clfs_df['max_ensemble'] = clfs_df[alg_prob_columns].apply(lambda x: cross_clf_max(x, args.num_classes), axis=1)
+
     clfs_ensemble_results = os.path.join(result_folder, "ensemble_%s" % args.modality, "%d_stages_ensemble_results_%s.pkl"
                                       % (args.num_classes, feature_type))
     print('post processing is completed!')
-    # algs = base_algs + ['max_ensemble', 'mean_ensemble', 'additive_ensemble', 'multiplicative_ensemble']
+
     algs = base_algs + ['max_ensemble', 'mean_ensemble']
     print('start evaluation ....')
     summary, results = classifier_level_evaluation_summary(clfs_df, algs, eval_method='macro',

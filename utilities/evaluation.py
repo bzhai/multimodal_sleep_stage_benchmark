@@ -1,20 +1,9 @@
-# import pandas as pd
-# import numpy as np
-# #from sleep_wake_benchmark_replication.traditional_scoring_methods import *
-# import sklearn.metrics as skm
-# from skmultilearn.utils import measure_per_label
-# from sklearn import metrics
+
 from utilities.evaluation_metrics import *
 from utilities.utils import *
-# EVAL_METRICS = ["Accuracy", "AccuracyBlock", "Precision", "PrecisionBlock", "Recall", "RecallBlock", "F1", "F1Block",
-#                 "Specificity", "SpecificityBlock"]
+
 EVAL_METRICS = ["accuracy", "precision", "recall", "specificity", "f1-score", "cohen-kappa"]
 LABEL_EVAL_METRIC = ["accuracy", "precision", "recall", "specificity", "f1-score"]
-
-
-# TIME_METRICS = ["DeltaStartBlock", "DeltaEndBlock"]
-# SLEEP_QUALITY_METRICS = ["WASOmins", "WASOMAE"]
-#  Evaluation function for different measurements such as accuracy, precession, recall, F1, F1_awake, specificity
 
 
 def evaluate_scoring_algorithm(df, alg, eval_method):
@@ -23,7 +12,6 @@ def evaluate_scoring_algorithm(df, alg, eval_method):
     # sleep block. The calculation of sleep efficiency will based on four different annotation.
 
     print('Evaluating model %s...' % alg)
-    # df[alg + "_block"] = df.groupby("mesaid")[alg].apply(lambda s: make_sleep_block(s, X_onset=20, X_twu=100))
     r = []
 
     for func in [eval_acc, eval_precision, eval_recall, eval_specificity, eval_f1, eval_cohen]:
@@ -33,13 +21,6 @@ def evaluate_scoring_algorithm(df, alg, eval_method):
         else:
             v = df.groupby("mesaid")[["stages"]].apply(lambda x: func(x["stages"], x["stages"]))
             r.append(v)
-        # this is the block-wised evaluation against the ground truth block
-        # r.append(df.groupby("mesaid")[[alg + "_block", "gt_sleep_block"]].apply(
-        #     lambda x: func(x["gt_sleep_block"], x[alg + "_block"], average="weighted")))
-
-    # TotalSleepPeriod
-    # r.append(df.groupby("mesaid")[["gt_sleep_block"]].apply(
-    #    lambda x: 0.0 if x["gt_sleep_block"].empty else gt_sleep_period_length(x[x["gt_sleep_block"] > 0])))
 
     res = pd.concat(r, axis=1)
     res.columns = EVAL_METRICS
@@ -51,20 +32,11 @@ def evaluate_scoring_algorithm_epoch_wise(df, alg, eval_method):
     # sleep block. The calculation of sleep efficiency will based on four different annotation.
 
     print('Evaluating model %s...' % alg)
-    # df[alg + "_block"] = df.groupby("mesaid")[alg].apply(lambda s: make_sleep_block(s, X_onset=20, X_twu=100))
     r = []
     for func in [eval_acc, eval_precision, eval_recall, eval_specificity, eval_f1, eval_cohen]:
-
         # we calculate the metrics for each subject
         r.append(func(df["stages"], df[alg], average=eval_method))
 
-        # this is the block-wised evaluation against the ground truth block
-        # r.append(df.groupby("mesaid")[[alg + "_block", "gt_sleep_block"]].apply(
-        #     lambda x: func(x["gt_sleep_block"], x[alg + "_block"], average="weighted")))
-
-    # TotalSleepPeriod
-    # r.append(df.groupby("mesaid")[["gt_sleep_block"]].apply(
-    #    lambda x: 0.0 if x["gt_sleep_block"].empty else gt_sleep_period_length(x[x["gt_sleep_block"] > 0])))
     res = pd.Series(r)
     res.index = EVAL_METRICS
     res.name = alg
@@ -85,13 +57,6 @@ def evaluate_scoring_algorithm_by_label(df, alg, num_classes, label_values=[]):
                                                    num_classes=num_classes))
     results = results.reset_index()
 
-    # results = pd.DataFrame()
-    # for pid in set(df.mesaid):
-    #     y_true = df[df["mesaid"] == pid]['stages']
-    #     y_pred = df[df['mesaid'] == pid][alg]
-    #     metrics = get_all_classes_prsf_metrics(y_true, y_pred, label_values=label_values, num_classes=num_classes)
-    #     metrics['mesaid'] = pid
-    #     results = results.append(metrics)
     return results
 
 def get_all_classes_prsf_metrics(y_true, y_pred, label_values=[], num_classes=0):
@@ -107,8 +72,6 @@ def get_all_classes_prsf_metrics(y_true, y_pred, label_values=[], num_classes=0)
     # get the classification result for each label
     evl_result = classification_report(y_true, y_pred, labels=label_values, output_dict=True)
     specificity = specificity_score(y_true, y_pred, labels=label_values, average=None)
-    # precision_skml = measure_per_label(skm.precision_score,y_true, y_pred)
-
     for i in np.arange(num_classes):
         results_dict = evl_result[str(i)]
         results_dict['label'] = i
@@ -140,10 +103,6 @@ def label_level_evaluation_summary(df, scoring_algorithm, num_classes):
             mlresults.append(a)
     return mlresults, results
 
-
-
-# def get_label_metrics(y_true, y_pred, ):
-#     result = classification_report(df[])
 
 def classifier_level_evaluation_summary_epoch_wise(df, scoring_algorithms, eval_method, num_classes, precomputed_dict=None):
     mlresults = []
@@ -180,7 +139,6 @@ def classifier_level_evaluation_summary(df, scoring_algorithms, eval_method, num
                 res = evaluate_scoring_algorithm(df, alg, eval_method)
             results[alg] = res.copy(deep=True)
         n = len(df.mesaid.unique())
-
         stds = res.std(axis=0).rename("Std")  # this line will return a vector represent (Series) each column's std
         means = res.mean(axis=0).rename("Mean")  # this line will return a vector represent (Series) each column's mean
         res = pd.concat([means, stds], axis=1)
@@ -202,15 +160,12 @@ def evaluate_whole_period_time_ml(df, scoring_algorithm, num_classes):
     for alg in scoring_algorithm:
         if alg == 'stages':
             res = calc_gt_mins(df['stages'], num_classes=num_classes)
-            # res = res.reset_index()  # reset index only happens when merge the aggregated results by groupby function-
-            # del res['level_1']
         else:
             res = calc_mins_per_alg_ml(df, alg, num_classes)
         results[alg] = res.copy(deep=True)
         columns = convert_int_to_label(num_classes)
         res = res.rename(columns=columns)
         res = res.rename(index={0:alg})
-        # res = pd.concat(results, axis=1)
         mlresults.append(res)
     mlresults = pd.concat(mlresults, ignore_index=True)
 
@@ -260,8 +215,6 @@ def calc_gt_mins(df, num_classes):
 def calc_mins_per_alg_ml(df, alg, num_classes):
     print("claculate minutes for %s" % alg)
     results = calc_mins_per_label(df["stages"], df[alg], num_classes=num_classes)
-    # results = results.reset_index()
-    # del results['level_1']
     return results
 
 
@@ -276,7 +229,6 @@ def calc_mins_per_alg(df, alg, num_classes):
     results = results.reset_index()
     del results['level_1']
     return results
-
 
 
 def calc_mins_per_label(y_true, y_pred, num_classes=0):

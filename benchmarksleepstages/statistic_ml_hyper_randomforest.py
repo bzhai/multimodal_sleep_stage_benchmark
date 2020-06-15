@@ -1,6 +1,5 @@
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
 from sleep_stage_config import Config
 from dataset_builder_loader.data_loader import *
 import argparse

@@ -67,10 +67,8 @@ def load_results(folder, num_classes, modality, feature_type, hrv_win_len):
     """
     Load results from machine learning based methods and combine with  deep learning model based results
     """
-    # ALGRESULTS = os.path.join(os.getcwd(), "results", "task%d_formulas.csv" % task)
     ml_results = os.path.join(folder, "%d_stages_%ds_ml_%s.csv" % (num_classes, hrv_win_len, modality))
 
-    # dfalg = pd.read_csv(ALGRESULTS)
     df_ml = pd.read_csv(ml_results)
     df_nn = get_nns(folder, num_classes, modality, feature_type, hrv_win_len)
     df_ml = df_ml.rename(columns={"Unnamed: 0":"algs"})

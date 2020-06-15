@@ -1,35 +1,25 @@
 from sklearn import metrics
 from dataset_builder_loader.data_loader import *
-from benchmarksleepstages import *
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import SGDClassifier
+
 from utilities.utils import *
 from sleep_stage_config import Config
 import os
 import argparse
 import sys
-import numpy as np
-from benchmarksleepstages.models.ml_models import *
-# Optmized models for Task 1:
 
+from benchmarksleepstages.models.ml_models import *
 
 
 def run_statistic_ml_test(model, Xtrain, Xtest, Ytrain, Ytest, model_name):
     print("start fitting model %s \n" % model)
     model.fit(Xtrain, Ytrain)
 
-    # Probabilities are not available for some models
-    if model_name in ["SGD_hinge", "SGD_perceptron", "SGD_huber"]:
-        prob = np.empty((Xtest.shape[0],))
-    else:
-        prob = model.predict_proba(Xtest)  # Saving only the probability of the 'sleep' class
-
     pred = model.predict(Xtest)
     print(" - Final Acuracy: %.4f" % (metrics.accuracy_score(Ytest, pred)))
     print(" - Final F1: %.4f" % (metrics.f1_score(Ytest, pred, average="macro")))
     print(classification_report(Ytest, pred))
     return model, pred
-    # return model, prob[:, 0], prob[:, 1], prob[:, 2], prob[:, 3], prob[:, 4], pred
+
 def build_feature_list(feature_type, full_feature):
     hrv_feature = ["Modified_csi", "csi", "cvi", "cvnni", "cvsd", "hf", "hfnu", "lf", "lf_hf_ratio", "lfnu", "max_hr",
                     "mean_hr", "mean_nni", "median_nni", "min_hr", "nni_20", "nni_50", "pnni_20", "pnni_50",
@@ -56,7 +46,7 @@ def main(args):
     data_loader = DataLoader(cfg, args.modality, args.num_classes, 20)
     print_args(args)
     print("loading H5 dataset from %s" % cfg.HRV30_ACC_STD_PATH)
-    # Xtrain, Ytrain, Xtest, Ytest = load_h5np_dataset(HRV_ACC_STD_PATH, file_type=".h5")
+
     data_loader.load_ml_data()
     df_test = data_loader.load_df_dataset()[1]
     scaler = load_scaler(cfg.STANDARDISER[args.hrv_win_len])
@@ -69,12 +59,9 @@ def main(args):
     print("...Runing models...")
     models = build_ml_models()
     for (model_name, model) in models:
-        # print("...Model: %s..." % model)
         model, df_test[model_name] = run_statistic_ml_test(model, data_loader.x_train, data_loader.x_test,
                                                           data_loader.y_train, data_loader.y_test, model_name)
-        # model, dftest["p_0" + model_name], dftest["p_1" + model_name], dftest["p_2" + model_name], \
-        # dftest["p_3" + model_name], dftest["p_4" + model_name], dftest[model_name] = \
-        #     run_statistic_ml_test(model, Xtrain, Xtest, Ytrain, Ytest, model_name)
+
         saved_models.append([model_name, model])
         print("...Done with %s..." % model_name)
     print("...Done...")
@@ -88,7 +75,6 @@ def main(args):
     df_test["activity"] = df_test["activity"].fillna(0.0)
     df_test[["mesaid", "linetime", "activity", "stages", "gt_sleep_block"] + [m[0] for m in models]].to_csv(
         os.path.join(stage_output_folder, "%d_stages_%ds_ml_%s.csv" % (args.num_classes, args.hrv_win_len, args.modality)), index=False)
-    # dftest[["mesaid","linetime","activity","stages","gt_sleep_block"] + [m[0] for m in models] + ["p_" + m[0] for m in models]].to_csv("%d_sleep_stages_task%d_ml.csv" % (NUM_STAGES, TASK), index=False)
     print("...Done...")
 
     dict_model = {"scaler": scaler, "models": saved_models}
@@ -107,5 +93,7 @@ def parse_arguments(argv):
                         help='window length to decide which h5 file to use, units=secs')
     return parser.parse_args(argv)
 
+
 if __name__ == '__main__':
     main(parse_arguments(sys.argv[1:]))
+

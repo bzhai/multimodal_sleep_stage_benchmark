@@ -3,13 +3,6 @@ import argparse
 from utilities.evaluation import *
 import os
 from sleep_stage_config import Config
-#from scipy.stats import ttest_ind
-# some task def here:
-# task 1: the prediction result of each modality alone.
-# task 2:
-
-# baselines = ["gt", "always0", "always1", "always2", "always3", "always4"]
-# defaultml = ["SVM_C2_B2", "LOGISTIC_REG", "RANDOM_FOREST_20"]
 
 
 def load_results(folder, num_classes, modality, feature_type, hrv_win_len):
@@ -33,7 +26,7 @@ def load_results(folder, num_classes, modality, feature_type, hrv_win_len):
     merged["always_2"] = 2
     merged["always_3"] = 3
     merged["always_4"] = 4
-    # merged["sleep"] = (~merged["wake"].astype(np.bool)).astype(float)
+
     return merged
 
 
@@ -77,11 +70,6 @@ def main(args):
     print('loading prediction results from %s' % result_folder)
     df = load_results(result_folder, args.num_classes, args.modality, feature_type, args.hrv_win_len)
     if args.period == "s":
-        # last_sleep_block_idx = \
-        # df[df["gt_sleep_block"] == 1].index.to_series().groupby(df['mesaid']).last().reset_index(name='x')[
-        #     'x'].values.tolist()
-        # last_sleep_block_idx = [x + 1 for x in last_sleep_block_idx]
-        # df.iloc[last_sleep_block_idx] = 1
         df = df[df["gt_sleep_block"] == 1]
 
     print("Expanding algorithms...")

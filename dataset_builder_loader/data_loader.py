@@ -1,15 +1,6 @@
 
 from sklearn.preprocessing import OneHotEncoder
-import numpy as np
-from datetime import datetime, timedelta
-import pandas as pd
-import os
-from sklearn import preprocessing
-from random import seed
-from random import shuffle
 import h5py
-
-from sleep_stage_config import Config
 from utilities.utils import *
 from sklearn.model_selection import train_test_split
 

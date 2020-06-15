@@ -1,16 +1,13 @@
 from dataset_builder_loader.data_loader import *
 from utilities.utils import *
 import argparse
-from sklearn.model_selection import train_test_split
-from datetime import datetime
-from keras.callbacks import TensorBoard
+
 import os
 import sys
 import pandas as pd
 from tensorflow.keras.backend import set_session
 from keras.models import *
 import tensorflow as tf
-from benchmarksleepstages import *
 from sleep_stage_config import Config
 
 np.set_printoptions(suppress=True)
@@ -40,7 +37,6 @@ def main(args):
     df_pred = df_pred[['mesaid', 'linetime', 'activity', 'gt_sleep_block', 'stages']]
     mat = {}
     for model in tqdm(args.models):
-        # dl_model = model.split('_')[0]
         dl_len = int(model.split('_')[1])
         data_loader = DataLoader(cfg, args.modality, args.num_classes, dl_len)
         data_loader.load_windowed_data()
@@ -55,7 +51,7 @@ def main(args):
         print("Model loaded from disk!")
         predictions = tf_model.predict(Xtest)
         mat[model] = predictions
-        # io.savemat("C:/tmp/post_processing_prob.mat", mdict=save_to_dict)
+
         df_pred = df_pred.reset_index(drop=True)
         clfs_labels_dic = {}
         tmp_label_list = []
