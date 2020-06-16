@@ -118,7 +118,7 @@ An example code is shown below for the sleep classification task of 3-stage usin
         python -m benchmarksleepstages.dl_probability_calculation --modality all --num_classes 3
  
 ## Evaluation
-The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics includes F1, Accuracy, Precision, Recall, Specificity and Cohen's Kappa <img src="https://render.githubusercontent.com/render/math?math=\kappa"> for each classifier. Two types evaluation completed in our paper, they are epoch-wise and subject level evaluation.
+The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics include F1, Accuracy, Precision, Recall, Specificity and Cohen's Kappa <img src="https://render.githubusercontent.com/render/math?math=\kappa"> for each classifier. Two types evaluation completed in our paper, they are epoch-wise and subject level evaluation.
          
 * Epoch-wise evaluation
 
