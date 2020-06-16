@@ -112,23 +112,23 @@ Build up the cache files for deep learning sliding window-based dataset per task
  
 * Ensemble methods
     
-    The ensemble method requires that all DL models are trained, and it will load each trained model and generate the prediction of test data set. The ensemble results shown in the paper are calculated based on the combined modalities (--modality all) of each task.
-An example code is shown below for the sleep classification task of three-stage using combined modalities:
+    The ensemble method requires that all DL models are trained, and it will load each trained model and generate the prediction of test data set. The ensemble results shown in the paper are calculated based on the combined modalities (`--modality all`) of each task.
+An example code is shown below for the sleep classification task of 3-stage using combined modalities:
         
         python -m benchmarksleepstages.dl_probability_calculation --modality all --num_classes 3
  
 ## Evaluation
-The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics includes F1, accuracy, precision and recall for each classifier. Two types evaluation completed in our paper, they are epoch-wise and subject level evaluation.
+The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics includes F1, Accuracy, Precision, Recall, Specificity and Cohen's Kappa <img src="https://render.githubusercontent.com/render/math?math=\kappa"> for each classifier. Two types evaluation completed in our paper, they are epoch-wise and subject level evaluation.
          
 * Epoch-wise evaluation
 
-    The epoch-wised evaluation should be conducted for each task, modality and evaluation period (sleep recording period and sleep period). An example code is shown below for the 3-stage sleep classification task of three-stage that adopted combined modalities based on deep learning methods.
+    The epoch-wised evaluation should be conducted for each task, modality and evaluation period (sleep recording period and sleep period). An example code is shown below for the 3-stage sleep classification task of 3-stage that adopted combined modalities based on deep learning methods.
  
         python -m benchmarksleepstages.summary_of_epoch_wise --num_classes 3 --modality all
  
 * Subject-level evaluation 
 
-    An example code is shown below for the 3-stage sleep classification task of three-stage that adopted combined modalities based on deep learning methods.
+    An example code is shown below for the 3-stage sleep classification task of 3-stage that adopted combined modalities based on deep learning methods.
         
         python -m benchmarksleepstages.summary_of_experiment --modality all --num_classes 3    --period r
               
