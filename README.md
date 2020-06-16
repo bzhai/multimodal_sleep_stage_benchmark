@@ -134,7 +134,7 @@ The script `summary_of_experiment.py` will calculate minutes level metrics such 
               
 * T-test
 
-    The t-testis conducted based on subjects level. An example jupyter notebook is in `results_analysis.ipynb`
+    The t-test conducted based on subjects level. An example jupyter notebook is in `results_analysis.ipynb`
 
 ## SHAP Feature Importance and Confusion Matrix
 An example code is shown below 
