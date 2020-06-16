@@ -85,7 +85,7 @@ Build up the cache files for deep learning sliding window-based dataset per task
         
         python -m benchmarksleepstages.statistic_ml_hyper_randomforest --modality all --num_classes 3
 
-    The following command will explore the best hyper-parameter settings for Random traditional ML models. An example code is shown below:
+    The following command will explore the best hyper-parameter settings for traditional ML models. An example code is shown below:
         
         python -m benchmarksleepstages.statistic_ml_hyperparam_sgd --modality all --num_classes 3
 * Hyper-parameter tuning for deep learning models. 
