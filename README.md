@@ -6,6 +6,10 @@ Despite rapid growth in research that applies machine learning to sleep data, pr
 Sleep data sets are inherently expensive and difficult to obtain and are usually relatively small compared to consumer industry data sets. Often, these data are not open to researchers outside the data owner’s institution.
 Here we present four public benchmarks for machine learning researchers interested in sleep medicine research, built using data from the publicly available Multi-Ethnic Study of Atherosclerosis ([paper 1](https://www.ncbi.nlm.nih.gov/pubmed/27070134), [paper 2](https://www.ncbi.nlm.nih.gov/pubmed/29860441) [MESA Dataset]( https://sleepdata.org/datasets/mesa)). Our four clinical prediction tasks are binary sleep-wake classification and multistage classification that were described in a copy of [pre-print paper](https://github.com/bzhai/multimodal_sleep_stage_benchmark/blob/master/Making%20Sense%20of%20Sleep%20Multimodal%20Sleep%20Stage%20Classification%20in%20a%20Large%2C%20Diverse%20Population%20Using%20Movement%20and%20Cardiac%20Sensin.pdf) in this repository:
 
+## News
+* 2020-07-07: To be clarified, we extracted HRV features from NN intervals (not from RR intervals). We added a tutorial written in jupyter notebook to show feature extraction pipelines for HRV and Actigraphy related features.  
+ 
+
 ## Citation
 
 If you use this code or these benchmarks in your research, please cite the following publication.
