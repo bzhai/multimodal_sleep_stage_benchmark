@@ -8,30 +8,8 @@ Here we present four public benchmarks for machine learning researchers interest
 
 ## News
 * 2020-07-07: To be clarified, we extracted HRV features from NN intervals (not from RR intervals). We added a tutorial written in jupyter notebook to show feature extraction pipelines for HRV and Actigraphy related features.  
- 
+* 2020-07-15: Added a tutorial for HRV feature extraction from ECG data
 
-## Citation
-
-If you use this code or these benchmarks in your research, please cite the following publication.
-```
-@article{10.1145/3397325,
-author = {Zhai, Bing and Perez-Pozuelo, Ignacio and Clifton, Emma A. D. and Palotti, Joao and Guan, Yu},
-title = {Making Sense of Sleep: Multimodal Sleep Stage Classification in a Large, Diverse Population Using Movement and Cardiac Sensing},
-year = {2020},
-issue_date = {June 2020},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-volume = {4},
-number = {2},
-url = {https://doi.org/10.1145/3397325},
-doi = {10.1145/3397325},
-journal = {Proc. ACM Interact. Mob. Wearable Ubiquitous Technol.},
-month = jun,
-articleno = {67},
-numpages = {33},
-keywords = {Heart Rate Variability, Heart Rate, Actigraphy, Neural Networks, Sleep, Multistage Classification, sleep Stage, Multimodal Sensing}
-}
-```
 
 ## Environment Requirement
 
@@ -56,7 +34,7 @@ Here I present an example of the experiment directory structure and their values
             ├─3stages # The experiment results of 3 sleep stages (Wake, REM and NREM) classification task will be stored in this folder
             ├─4stages # The experiment results of 4 sleep stages (Wake, Light, Deep and REM Sleep) classification will be stored in this folder
             ├─5stages # The experiment results of 5 sleep stages (Wake, N1, N2, N3 and REM) classification will be stored in this folder
-            └─HP_CV_TUNING 
+            └─HP_CV_TUNING
                 ├─CNN # The experiment results of hyperparameter tuning for convolutional neural networks will be stored in this folder
                 └─LSTM # The experiment results of hyperparameter tuning for LSTMs will be stored in this folder
 
@@ -77,72 +55,97 @@ Align RRI and Actigraphy data
 Build up the H5py file that contains training and testing dataset
 
     python -m dataset_builder_loader.build_h5_file
-    
+
 Build up the cache files for deep learning sliding window-based dataset per task per sequence length.
-    
+
     python -m dataset_builder_loader.build_cached_sliding_window_dataset –seq_len 20 –modality  all –num_classes 3
- 
+
+## Tutorial
+* Extracting HRV Features from ECG data [link](https://github.com/bzhai/multimodal_sleep_stage_benchmark/blob/master/notebooks/Tutorial-HRV%20Feature%20Extraction%20From%20ECG.ipynb)
+
 ## Hyper-parameter Tuning
-* Hyper-parameter tuning for traditional ML models. 
-    
+* Hyper-parameter tuning for traditional ML models.
+
     The following command will explore the best hyper-parameter settings for Random Forest models. An example code is shown below:
-        
+
         python -m benchmarksleepstages.statistic_ml_hyper_randomforest --modality all --num_classes 3
 
     The following command will explore the best hyper-parameter settings for traditional ML models. An example code is shown below:
-        
+
         python -m benchmarksleepstages.statistic_ml_hyperparam_sgd --modality all --num_classes 3
-* Hyper-parameter tuning for deep learning models. 
-    
+* Hyper-parameter tuning for deep learning models.
+
     The following command will explore multi-layers CNNs.An example code is shown below:
 
         python -m benchmarksleepstages.dl_cnn_hp_tuning_multi_layers --epoch 10 batch_size 128 –modality all
-    
+
     The following command will explore multi-LSTMs. an example code is shown below:
-        
+
         python -m benchmarksleepstages.dl_lstm_hp_tuning_multi_layers --epoch 10 batch_size 128 –modality all
 
 ## Training and Testing
 * ML models
-    
+
     For traditional ML models, we should run experiments for each modality and task. Before running the experiment, make sure that the optimal hyperparameters are set. An example code is shown below:
-    
+
         python -m benchmarksleepstages.statistic_ml_experiment --modality all --num_classes 3
 * DL models
-    
+
     For deep learning models, we should run experiments for each modality and task. An example code is shown below:
-        
+
         python -m benchmarksleepstages.dl_experiment --modality all --num_classes 3 --nn_type LSTM --seq_len 20 --epochs 20 --batch_size 128
- 
+
 * Ensemble methods
-    
+
     The ensemble method requires that all DL models are trained, and it will load each trained model and generate the prediction of test data set. The ensemble results shown in the paper are calculated based on the combined modalities (`--modality all`) of each task.
 An example code is shown below for the sleep classification task of 3-stage using combined modalities:
-        
+
         python -m benchmarksleepstages.dl_probability_calculation --modality all --num_classes 3
- 
+
 ## Evaluation
 The script `summary_of_experiment.py` will calculate minutes level metrics such as the minute deviation and also classifier level metrics include F1, Accuracy, Precision, Recall, Specificity and Cohen's Kappa <img src="https://render.githubusercontent.com/render/math?math=\kappa"> for each classifier. Two types evaluation completed in our paper, they are epoch-wise and subject level evaluation.
-         
+
 * Epoch-wise evaluation
 
     The epoch-wised evaluation should be conducted for each task, modality and evaluation period (sleep recording period and sleep period). An example code is shown below for the 3-stage sleep classification task of 3-stage that adopted combined modalities based on deep learning methods.
- 
+
         python -m benchmarksleepstages.summary_of_epoch_wise --num_classes 3 --modality all
- 
-* Subject-level evaluation 
+
+* Subject-level evaluation
 
     An example code is shown below for the 3-stage sleep classification task of 3-stage that adopted combined modalities based on deep learning methods.
-        
+
         python -m benchmarksleepstages.summary_of_experiment --modality all --num_classes 3    --period r
-              
+
 * T-test
 
     The t-test conducted based on subjects level. An example jupyter notebook is in `results_analysis.ipynb`
 
 ## SHAP Feature Importance and Confusion Matrix
-An example code is shown below 
-        
+An example code is shown below
+
         python -m benchmarksleepstages.summary_shap_feature_importance --modality all --load_pretrain 0 --num_class 3
 
 
+## Citation
+
+If you use this code or these benchmarks in your research, please cite the following publication.
+```
+@article{10.1145/3397325,
+author = {Zhai, Bing and Perez-Pozuelo, Ignacio and Clifton, Emma A. D. and Palotti, Joao and Guan, Yu},
+title = {Making Sense of Sleep: Multimodal Sleep Stage Classification in a Large, Diverse Population Using Movement and Cardiac Sensing},
+year = {2020},
+issue_date = {June 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {4},
+number = {2},
+url = {https://doi.org/10.1145/3397325},
+doi = {10.1145/3397325},
+journal = {Proc. ACM Interact. Mob. Wearable Ubiquitous Technol.},
+month = jun,
+articleno = {67},
+numpages = {33},
+keywords = {Heart Rate Variability, Heart Rate, Actigraphy, Neural Networks, Sleep, Multistage Classification, sleep Stage, Multimodal Sensing}
+}
+```
