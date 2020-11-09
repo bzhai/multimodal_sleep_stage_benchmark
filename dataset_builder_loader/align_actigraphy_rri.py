@@ -20,7 +20,7 @@ class MesaHrvFeatureBuilder(object):
         self.output_path = cfg.CSV30_DATA_PATH
         if os.path.exists(self.output_path):
             Path(self.output_path).mkdir(parents=True, exist_ok=True)
-        self.processed_records = os.path.join(self.output_path,
+        self.processed_records = os.path.join(self.output_path, os.pardir,
                                               'processed_'+datetime.now().strftime("%Y%m%d-%H%M%S")+'.csv')
         self.rr_act_overlap_df = []  # "rr_ecg_act_overlap.csv"
         self.hrv_win = hrv_win
@@ -54,7 +54,7 @@ class MesaHrvFeatureBuilder(object):
             with open(self.processed_records, "w") as output:
                 writer = csv.writer(output, lineterminator='\n')
                 writer.writerows(total_processed)
-        tag = datetime.now().strftime("%Y%m%d-%H%M%S")
+        # tag = datetime.now().strftime("%Y%m%d-%H%M%S")
         for PID in total_subjects_list:
             mesa_id = "%04d" % PID
             # filter Acc and HR based on the overlap records
@@ -156,27 +156,27 @@ class MesaHrvFeatureBuilder(object):
                     try:
                         all_hr_features.update(hrvana.get_time_domain_features(rr_epoch))
                     except Exception as ee:
-                        self.log_process(ee, PID, hr_epoch_idx, tag)
+                        self.log_process(ee, PID, hr_epoch_idx)
                         print("processed time domain features: {}".format(str(ee)))
                     try:
                         all_hr_features.update(hrvana.get_frequency_domain_features(rr_epoch))
                     except Exception as ee:
-                        self.log_process(ee, PID, hr_epoch_idx, tag)
+                        self.log_process(ee, PID, hr_epoch_idx)
                         print("processed frequency domain features: {}".format(str(ee)))
                     try:
                         all_hr_features.update(hrvana.get_poincare_plot_features(rr_epoch))
                     except Exception as ee:
-                        self.log_process(ee, PID, hr_epoch_idx, tag)
+                        self.log_process(ee, PID, hr_epoch_idx)
                         print("processed poincare features: {}".format(str(ee)))
                     try:
                         all_hr_features.update(hrvana.get_csi_cvi_features(rr_epoch))
                     except Exception as ee:
-                        self.log_process(ee, PID, hr_epoch_idx, tag)
+                        self.log_process(ee, PID, hr_epoch_idx)
                         print("processed csi cvi domain features: {}".format(str(ee)))
                     try:
                         all_hr_features.update(hrvana.get_geometrical_features(rr_epoch))
                     except Exception as ee:
-                        self.log_process(ee, PID, hr_epoch_idx, tag)
+                        self.log_process(ee, PID, hr_epoch_idx)
                         print("processed geometrical features: {}".format(str(ee)))
 
                     all_hr_features.update({'stages': gt_label
@@ -226,8 +226,10 @@ class MesaHrvFeatureBuilder(object):
                 total_processed.append("ID: {}, failed process".format(mesa_id))
 
     def log_process(self, error, mesaid, epoch_idx):
-        with open(os.path.join(self.output_path, "process_log" + ".txt"), "a") as file:
-            file.writelines("mesaid, %04d, epoch idx, %d, processed with issues, %s" % (mesaid, epoch_idx, error))
+        with open(os.path.join(self.output_path, os.pardir, "process_log" + ".txt"), "a") as file:
+            file.write("mesaid, %04d, epoch idx, %d, processed with issues, %s" % (mesaid, epoch_idx, error)
+                       + "\n")
+
 
 
 if __name__ == "__main__":
