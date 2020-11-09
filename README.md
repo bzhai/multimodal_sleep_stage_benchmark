@@ -1,6 +1,5 @@
 Movement and Cardiac Sensing Based Sleep Stages Classification
 =========================
-[![Gitter](https://badges.gitter.im/multi-modality_sleep_monitoring/community.svg)](https://gitter.im/multi-modality_sleep_monitoring/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Despite rapid growth in research that applies machine learning to sleep data, progress in the field appears far less dramatic than in other applications of machine learning.
 Sleep data sets are inherently expensive and difficult to obtain and are usually relatively small compared to consumer industry data sets. Often, these data are not open to researchers outside the data owner’s institution.
@@ -9,7 +8,7 @@ Here we present four public benchmarks for machine learning researchers interest
 ## News
 * 2020-07-07: To be clarified, we extracted HRV features from NN intervals (not from RR intervals). We added a tutorial written in jupyter notebook to show feature extraction pipelines for HRV and Actigraphy related features.  
 * 2020-07-15: Added a tutorial for HRV feature extraction from ECG data
-
+* 2020-11-09: Missed train/test split file which used in the paper. I uploaded it to the root of the project.
 
 ## Environment Requirement
 
