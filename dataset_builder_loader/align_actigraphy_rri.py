@@ -206,9 +206,7 @@ class MesaHrvFeatureBuilder(object):
                 combined_pd.loc[combined_pd['stages'] > 4, 'stages'] = 4  # make sure rem sleep label is 4
                 combined_pd = combined_pd.fillna(combined_pd.median())
                 combined_pd = combined_pd[combined_pd['interval'] != 'EXCLUDED']
-                aligned_data = os.path.join(self.output_path, "Aligned_final")
-                if not os.path.exists(aligned_data):
-                    os.mkdir(aligned_data)
+                aligned_data = self.output_path
 
                 # standardise and normalise the df
                 feature_list = combined_pd.columns.to_list()
