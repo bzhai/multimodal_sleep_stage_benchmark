@@ -20,7 +20,7 @@ class Config(object):
                              }
         # Deep learning H5 cache file for windowed data.
         self.NN_ACC_HRV = r"C:\tmp\sleep\opensource\HRV30s_ACC30s_H5\nn_acc_hrv30s_%d.h5"
-        self.FEATURE_LIST = r"C:\tmp\sleep\opensource\feature_list.csv"
+        self.FEATURE_LIST = "./assets/feature_list.csv"
         self.EXPERIMENT_RESULTS_ROOT_FOLDER = r"C:\tmp\sleep\opensource\Results"
 
 
@@ -33,7 +33,7 @@ class Config(object):
                                       5: r"C:\tmp\sleep\opensource\Results\HRV30s_ACC\5stages"}
         self.CNN_FOLDER = r"C:\tmp\sleep\opensource\Results\HRV30s_ACC\HP_CV_TUNING\CNN"
         self.LSTM_FOLDER = r"C:\tmp\sleep\opensource\Results\HRV30s_ACC\HP_CV_TUNING\LSTM"
-        self.TRAIN_TEST_SPLIT = r"C:\tmp\sleep\opensource\train_test_pid_split.csv"
+        self.TRAIN_TEST_SPLIT = "./assets/train_test_pid_split.csv"
         # A readable table for all algorithms
-        self.ALG_READABLE_FILE = r"C:\tmp\sleep\opensource\alg_readable.csv"
+        self.ALG_READABLE_FILE = "./assets/alg_readable.csv"
         self.SUMMARY_FOLDER = {'r': 'summary', 's': 'sp_summary'}

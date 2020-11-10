@@ -1,0 +1,13 @@
+Old_Name,New_Name
+CNN_20_ENMO_HRV,CNN 20
+CNN_50_ENMO_HRV,CNN 50
+CNN_100_ENMO_HRV,CNN 100
+LSTM_20_ENMO_HRV,LSTM 20
+LSTM_50_ENMO_HRV,LSTM 50
+LSTM_100_ENMO_HRV,LSTM 100
+SGD_hinge,Linear SVM
+SGD_log,Logistic Regression
+SGD_perceptron,Perception
+Random_forest_20,Rnadome Forest Trees = 20
+Random_forest_100,Rnadome Forest Trees = 100
+Random_forest_300,Rnadome Forest 300
