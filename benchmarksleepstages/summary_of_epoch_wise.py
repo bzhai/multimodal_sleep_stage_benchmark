@@ -1,9 +1,7 @@
 from glob import glob
 import sys
 import argparse
-# from utilities.utils import get_nndf
 from utilities.evaluation import *
-from dataset_builder_loader.make_h5py_file import *
 from sleep_stage_config import Config
 
 

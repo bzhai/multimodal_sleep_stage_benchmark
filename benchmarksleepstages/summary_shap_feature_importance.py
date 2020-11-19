@@ -1,4 +1,3 @@
-from dataset_builder_loader.make_h5py_file import *
 from dataset_builder_loader.data_loader import DataLoader
 from sleep_stage_config import Config
 import os
