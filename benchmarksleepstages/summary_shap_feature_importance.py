@@ -7,8 +7,9 @@ import pickle
 import seaborn as sns
 import shap
 import matplotlib.colors as mcolors
+import numpy as np
+from utilities.utils import convert_int_to_label_list
 
-# matplotlib.use('Agg')
 
 def main(args):
     cfg = Config()
@@ -27,12 +28,12 @@ def main(args):
     stage_output_folder = cfg.STAGE_OUTPUT_FOLDER_HRV30s[args.num_classes]
     if args.load_pretrain == 1:
         with open(os.path.join(stage_output_folder, "shap_value_feature_importance_%d_classes_%s_%ds"
-                                                                      % (args.num_classes, args.modality,
-                                                                         args.hrv_win_len) + ".pkl"), "rb") as f:
+                                                    % (args.num_classes, args.modality,
+                                                       args.hrv_win_len) + ".pkl"), "rb") as f:
             pre_train_dict = pickle.load(f)
             X = pre_train_dict['X']
             shap_values = pre_train_dict['shape_value']
-        #explainer = shap.TreeExplainer(random_forest)
+        # explainer = shap.TreeExplainer(random_forest)
     else:
         print("loading H5 dataset from %s" % cfg.HRV30_ACC_STD_PATH)
         data_loader = DataLoader(cfg, args.modality, args.num_classes, args.seq_len)
@@ -47,7 +48,8 @@ def main(args):
         shap_values = explainer.shap_values(X)
         shap_dump = {"shape_value": shap_values, "X": X}
         with open(os.path.join(stage_output_folder[args.num_classes], "shap_value_feature_importance_%d_classes_%s_%ds"
-                                                                              % (args.num_classes, args.modality, args.hrv_win_len) + ".pkl"), "wb") as f:
+                                                                      % (args.num_classes, args.modality,
+                                                                         args.hrv_win_len) + ".pkl"), "wb") as f:
             pickle.dump(shap_dump, f)
 
     # summarize the effects of all the features
@@ -57,12 +59,15 @@ def main(args):
         def class_color(idx):
             class_colors = {0: mcolors.CSS4_COLORS['gold'], 1: mcolors.CSS4_COLORS['midnightblue']}
             return class_colors[idx]
+
         shap.summary_plot(shap_values, X, plot_type='bar', class_names=labels, color=class_color, max_display=40)
 
     elif args.num_classes == 3:
         def class_color(idx):
-            class_colors = {0: mcolors.CSS4_COLORS['gold'], 1: mcolors.CSS4_COLORS['mediumblue'], 2: mcolors.CSS4_COLORS['skyblue']}
+            class_colors = {0: mcolors.CSS4_COLORS['gold'], 1: mcolors.CSS4_COLORS['mediumblue'],
+                            2: mcolors.CSS4_COLORS['skyblue']}
             return class_colors[idx]
+
         shap.summary_plot(shap_values, X, plot_type='bar', class_names=labels, color=class_color)
 
     elif args.num_classes == 4:
@@ -70,21 +75,25 @@ def main(args):
             class_colors = {0: mcolors.CSS4_COLORS['gold'], 1: mcolors.CSS4_COLORS['dodgerblue'],
                             2: mcolors.CSS4_COLORS['darkblue'], 3: mcolors.CSS4_COLORS['skyblue']}
             return class_colors[idx]
-        shap.summary_plot(shap_values, X, plot_type='bar', class_names=labels, color=class_color,max_display=40)
+
+        shap.summary_plot(shap_values, X, plot_type='bar', class_names=labels, color=class_color, max_display=40)
     else:
         def class_color(idx):
-            class_colors = {0: mcolors.CSS4_COLORS['gold'], 1: mcolors.CSS4_COLORS['royalblue'], 2: mcolors.CSS4_COLORS['blue'], 3: mcolors.CSS4_COLORS['navy'],
+            class_colors = {0: mcolors.CSS4_COLORS['gold'], 1: mcolors.CSS4_COLORS['royalblue'],
+                            2: mcolors.CSS4_COLORS['blue'], 3: mcolors.CSS4_COLORS['navy'],
                             4: mcolors.CSS4_COLORS['skyblue']}
             return class_colors[idx]
+
         shap.summary_plot(shap_values, X, plot_type='bar', class_names=labels, color=class_color, max_display=40)
 
     print("Feature importance ranking is completed")
     print("")
 
+
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--modality', type=str, default='all', help='the raw modality to use.')
-    parser.add_argument('--num_classes', type=int, default=2, help='number of classes or labels')
+    parser.add_argument('--num_classes', type=int, default=5, help='number of classes or labels')
     parser.add_argument('--load_pretrain', type=int, default=1, help='loading pre-trained SHAP')
     parser.add_argument('--shap_samples', type=int, default=500, help='training examples to calculate shap value')
     parser.add_argument('--hrv_win_len', type=int, default=30,
@@ -92,5 +101,7 @@ def parse_arguments(argv):
     parser.add_argument('--rf_trees', type=int, default=300, help='training examples to calculate shap value')
     return parser.parse_args(argv)
 
+
 if __name__ == '__main__':
+    print("Start plot SHAP importance")
     main(parse_arguments(sys.argv[1:]))
