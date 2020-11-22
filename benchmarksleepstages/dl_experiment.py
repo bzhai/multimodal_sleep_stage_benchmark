@@ -66,7 +66,7 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--nn_type', type=str, default="LSTM", help='define the neural network type')
     parser.add_argument('--seq_len', type=int, default=100, help='the window length unit is sleep epochs')
-    parser.add_argument('--modality', type=str, default="all", help='the modality to use.')
+    parser.add_argument('--modality', type=str, default="acc", help='the modality to use.')
     parser.add_argument('--num_classes', type=int, default=3, help='number of classes or labels')
     parser.add_argument('--training', type=int, default=1, help='training or predicting')
     parser.add_argument('--epochs', type=int, default=20, help='training epochs')

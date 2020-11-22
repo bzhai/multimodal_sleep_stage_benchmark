@@ -101,18 +101,18 @@ class DataLoader(object):
                 self.y_test = data["y_test"][:]
             elif self.modality == "acc":
                 self.x_train = np.expand_dims(data["x_train"][:, :, 0], -1)
-                self.y_train = np.expand_dims(data["y_train"][:], -1)
+                self.y_train = data["y_train"][:]
                 self.x_val = np.expand_dims(data["x_val"][:, :, 0], -1)
-                self.y_val = np.expand_dims(data["y_val"][:], -1)
+                self.y_val = data["y_val"][:]
                 self.x_test = np.expand_dims(data["x_test"][:, :, 0], -1)
-                self.y_test = np.expand_dims(data["y_test"][:], -1)
+                self.y_test = data["y_test"][:]
             elif self.modality == "hr":
                 self.x_train = np.expand_dims(data["x_train"][:, :, 1], -1)
-                self.y_train = np.expand_dims(data["y_train"][:], -1)
+                self.y_train = data["y_train"][:]
                 self.x_val = np.expand_dims(data["x_val"][:, :, 1], -1)
-                self.y_val = np.expand_dims(data["y_val"][:], -1)
+                self.y_val = data["y_val"][:]
                 self.x_test = np.expand_dims(data["x_test"][:, :, 1], -1)
-                self.y_test = np.expand_dims(data["y_test"][:], -1)
+                self.y_test = data["y_test"][:]
             data.close()
         if len(self.y_train.shape) < 2 or len(set(self.y_train)) != self.num_classes:
             self.y_train = self.cast_sleep_stages_and_onehot_encode(self.y_train, self.num_classes)
