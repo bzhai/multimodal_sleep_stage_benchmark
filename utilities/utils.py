@@ -430,7 +430,7 @@ def plot_pr_re_curve(y_true, y_prob, save_path=None):
 
 
 def plot_roc_curve(y_true, y_prob, save_path=None):
-    if max(y_true) == 1:
+    if max(y_true) != 1:
         return
     fpr, tpr, thresholds = roc_curve(y_true, y_prob)
     auc = roc_auc_score(y_true, y_prob)
@@ -455,11 +455,14 @@ def plot_roc_curve(y_true, y_prob, save_path=None):
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend()
-    plt.show()
     if len(save_path) > 0:
         _save_path = os.path.join(save_path, "ROC_Curve.png")
-        plt.savefig(_save_path)
+        plt.savefig(_save_path, bbox_inches='tight', dpi=300)
         return _save_path
+    plt.show()
+    f = plt.figure()
+    f.clear()
+    plt.close(f)
     return ''
 
 
