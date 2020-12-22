@@ -9,6 +9,7 @@ Here we present four public benchmarks for machine learning researchers interest
 * 2020-07-07: To be clarified, we extracted HRV features from NN intervals (not from RR intervals). We added a tutorial written in jupyter notebook to show feature extraction pipelines for HRV and Actigraphy related features.  
 * 2020-07-15: Added a tutorial for HRV feature extraction from ECG data
 * 2020-11-09: Missed train/test split file which used in the paper. I uploaded it to the root of the project.
+* 2020-12-22: uploaded Hyperparameter tuning results.
 
 ## Environment Requirement
 
