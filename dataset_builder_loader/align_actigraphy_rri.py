@@ -32,7 +32,6 @@ class MesaHrvFeatureBuilder(object):
         the dataset quality control will filter out the RRI dataset with lower bound= 300, upper bound with 1000
         the output will be in either test output path or the actual output path.
         :param is_test: true is for test dataset
-        :param output15s: true is to ouput the 15s epoch of hr dataset
         :return:
         '''
         # load Acc, HR and overlap files
@@ -94,7 +93,7 @@ class MesaHrvFeatureBuilder(object):
                 # Cut HRV dataset based on length of Actigraphy dataset
                 if (int(hr_df['epoch'].tail(1)) > acc_df.shape[0]):
                     hr_df = hr_df[hr_df['epoch'] <= acc_df.shape[0]]
-                # take out the noise dataset if two peak overlap or not wear
+                # remove the noise data points if two peaks overlapped or not wear
                 hr_df = hr_df[hr_df['TPoint'] > 0]
                 # Define RR intervals by taking the difference between each one of the measurements in seconds (*1k)
                 hr_df['RR Intervals'] = hr_df['seconds'].diff() * 1000
