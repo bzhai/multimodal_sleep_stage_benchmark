@@ -179,12 +179,12 @@ class MesaHrvFeatureBuilder(object):
                         print("processed geometrical features: {}".format(str(ee)))
 
                     all_hr_features.update({'stages': gt_label
-                                            , 'mesaid': acc_df[acc_df['line']==hr_epoch_idx]['mesaid'].values[0]
-                                            , 'linetime': acc_df[acc_df['line']==hr_epoch_idx]['linetime'].values[0]
-                                            , 'line': acc_df[acc_df['line'] == hr_epoch_idx]['line'].values[0]
-                                            , 'wake': acc_df[acc_df['line'] == hr_epoch_idx]['wake'].values[0]
-                                            , 'interval': acc_df[acc_df['line'] == hr_epoch_idx]['interval'].values[0]
-                                            , 'activity': acc_df[acc_df['line'] == hr_epoch_idx]['activity'].values[0]
+                                               , 'mesaid': acc_df[acc_df['line']==hr_epoch_idx]['mesaid'].values[0]
+                                               , 'linetime': acc_df[acc_df['line']==hr_epoch_idx]['linetime'].values[0]
+                                               , 'line': acc_df[acc_df['line'] == hr_epoch_idx]['line'].values[0]
+                                               , 'wake': acc_df[acc_df['line'] == hr_epoch_idx]['wake'].values[0]
+                                               , 'interval': acc_df[acc_df['line'] == hr_epoch_idx]['interval'].values[0]
+                                               , 'activity': acc_df[acc_df['line'] == hr_epoch_idx]['activity'].values[0]
                                             })
                     feature_list.append(all_hr_features)
 
@@ -209,18 +209,20 @@ class MesaHrvFeatureBuilder(object):
 
                 # standardise and normalise the df
                 feature_list = combined_pd.columns.to_list()
-                std_feature = [x for x in feature_list if x not in ['two_stages', 'seconds', 'activity', 'interval',
+                std_feature = [x for x in feature_list if x not in ['two_stages', 'seconds', 'interval',
                                                                     'wake', 'linetime', 'mesaid', 'stages', 'line']]
                 if self.standarize:
                     standardize_df_given_feature(combined_pd, std_feature, df_name='combined_df', simple_method=False)
                 combined_pd.to_csv(os.path.join(aligned_data, (mesa_id + '_combined.csv')), index=False)
                 print("ID: {}, successed process".format(mesa_id))
-                with open(self.processed_records, "w") as text_file:
+                with open(self.processed_records, "a") as text_file:
                     text_file.write("ID: {}, successed process \n".format(mesa_id))
                 total_processed.append("ID: {}, successed process".format(mesa_id))
             else:
                 print("Acc is empty or HRV is empty!")
                 total_processed.append("ID: {}, failed process".format(mesa_id))
+                with open(self.processed_records, "a") as text_file:
+                    text_file.write("ID: {}, failed process".format(mesa_id))
 
     def log_process(self, error, mesaid, epoch_idx):
         with open(os.path.join(self.output_path, os.pardir, "process_log" + ".txt"), "a") as file:

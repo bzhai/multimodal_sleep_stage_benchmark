@@ -27,12 +27,12 @@ class DataLoader(object):
 
     def __prepare_feature_list__(self):
         if self.modality == "all":
-            self.dl_feature_list = ["activity", "mean_nni", "sdnn", "sdsd", "vlf", "lf", "hf", "lf_hf_ratio",
+            self.dl_feature_list = ["_Act", "mean_nni", "sdnn", "sdsd", "vlf", "lf", "hf", "lf_hf_ratio",
                                  "total_power"]
         elif self.modality == "hrv":
             self.dl_feature_list = ["mean_nni", "sdnn", "sdsd", "vlf", "lf", "hf", "lf_hf_ratio", "total_power"]
         elif self.modality == "acc":
-            self.dl_feature_list = ["activity"]
+            self.dl_feature_list = ["_Act"]
         elif self.modality == "hr":
             self.dl_feature_list = ["mean_nni"]
         self.ml_feature_list = pd.read_csv(self.config.FEATURE_LIST)['feature_list'].values
