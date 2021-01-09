@@ -93,12 +93,14 @@ def main(args):
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--modality', type=str, default='all', help='the raw modality to use.')
-    parser.add_argument('--num_classes', type=int, default=5, help='number of classes or labels')
+    parser.add_argument('--num_classes', type=int, default=3, help='number of classes or labels')
     parser.add_argument('--load_pretrain', type=int, default=1, help='loading pre-trained SHAP')
     parser.add_argument('--shap_samples', type=int, default=500, help='training examples to calculate shap value')
     parser.add_argument('--hrv_win_len', type=int, default=30,
                         help='window length to decide which h5 file to use, units=secs')
     parser.add_argument('--rf_trees', type=int, default=300, help='training examples to calculate shap value')
+    parser.add_argument('--seq_len', type=int, default=100, help='number of classes or labels',
+                        choices={20, 50, 100})
     return parser.parse_args(argv)
 
 
