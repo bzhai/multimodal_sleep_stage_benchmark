@@ -10,6 +10,7 @@ Here we present four public benchmarks for machine learning researchers interest
 * 2020-07-15: Added a tutorial for HRV feature extraction from ECG data
 * 2020-11-09: Missed train/test split file which used in the paper. I uploaded it to the root of the project.
 * 2020-12-22: uploaded Hyperparameter tuning results.
+* 2021-01-09: Fix bug in SHAP feature importance generation code, and fix a bug in `build_cached_sliding_window_dataset.py`. The activity counts for DL models didn't standardized, so this fix should improve the outcomes marginally.
 
 ## Environment Requirement
 
