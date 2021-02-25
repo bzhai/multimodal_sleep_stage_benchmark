@@ -136,8 +136,8 @@ class DataLoader(object):
         df_train, df_test, feat_names = load_h5_df_dataset(self.config.HRV30_ACC_STD_PATH)
         cache_path = self.config.NN_ACC_HRV % win_len
         print("building cached dataset for window length: %s ....." % win_len)
-        x_train, y_train = get_data(df_train, win_len, self.dl_feature_list)
         x_test, y_test = get_data(df_test, win_len, self.dl_feature_list)
+        x_train, y_train = get_data(df_train, win_len, self.dl_feature_list)
         x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.20, random_state=42, shuffle=False)
         with h5py.File(cache_path, 'w') as data:
             data["x_train"] = x_train

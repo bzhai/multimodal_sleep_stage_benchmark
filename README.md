@@ -10,14 +10,14 @@ Here we present four public benchmarks for machine learning researchers interest
 * 2020-07-15: Added a tutorial for HRV feature extraction from ECG data
 * 2020-11-09: Missed train/test split file which used in the paper. I uploaded it to the root of the project.
 * 2020-12-22: uploaded Hyperparameter tuning results.
-* 2021-01-09: Fix bug in SHAP feature importance generation code, and fix a bug in build_cached_sliding_window_dataset.py. The activity counts for DL models isn't standardized, so this fix should improve the outcomes marginally.
+* 2021-01-09: Fix bug in SHAP feature importance generation code, and fix a bug in build_cached_sliding_window_dataset.py. The activity counts for DL models aren't standardized, so this fix should improve the outcomes marginally.
 ## Environment Requirement
 
 We have two environments for our paper.
 
 1. The first environment is used to build data sets and perform all deep learning experiments. TensorFlow version is 1.14 and python version is 3.7.3
 Please build all data sets based on this environment
-2. The second environment is only used for hyper-parameter search of deep learning models. We use TensorFlow 2.0 version to complete the super parameter search。
+2. The second environment is only used for hyper-parameter search of deep learning models. We use TensorFlow 2.0 version to complete the hyperparameter search。
 
 
 You may setup the experiment directory according to your experiment system.
