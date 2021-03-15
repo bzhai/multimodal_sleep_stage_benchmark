@@ -10,7 +10,7 @@ import sys
 from benchmarksleepstages.models.ml_models import *
 
 
-def run_statistic_ml_test(model, Xtrain, Xtest, Ytrain, Ytest, model_name):
+def run_statistic_ml_test(model, Xtrain, Xtest, Ytrain, Ytest):
     print("start fitting model %s \n" % model)
     model.fit(Xtrain, Ytrain)
 

@@ -12,11 +12,7 @@ class H5DatasetBuilder(object):
     def build_mesa_h5file(self):
         """
         This function is designed to build a H5 file to speed up IO for experiment
-        :param data_path:
-        :param feat_list_path:
-        :param saveCache:
-        :param cacheName:
-        :return:
+
         """
         tmp = []
         all_files = os.listdir(self.csv_path)

@@ -1,3 +1,17 @@
+"""
+Make Sense of Sleep: Dataloader for deep learning method
+Copyright (C) 2020 Newcastle University, Bing Zhai
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
 
 from sklearn.preprocessing import OneHotEncoder
 import h5py
@@ -7,7 +21,7 @@ from sklearn.model_selection import train_test_split
 
 class DataLoader(object):
     """
-    a dataset loader for actigraphy
+    a dataset loader that can feed data by given modalities.
     """
 
     def __init__(self, cfg, modality, num_classes, seq_len):
@@ -26,15 +40,20 @@ class DataLoader(object):
         self.__prepare_feature_list__()
 
     def __prepare_feature_list__(self):
+        # all: using all the modalities
         if self.modality == "all":
             self.dl_feature_list = ["_Act", "mean_nni", "sdnn", "sdsd", "vlf", "lf", "hf", "lf_hf_ratio",
                                  "total_power"]
+        # hrv: the cardiac sensing only
         elif self.modality == "hrv":
             self.dl_feature_list = ["mean_nni", "sdnn", "sdsd", "vlf", "lf", "hf", "lf_hf_ratio", "total_power"]
+        # acc: the actigraphy data
         elif self.modality == "acc":
             self.dl_feature_list = ["_Act"]
+        # hr: the heart rate data only
         elif self.modality == "hr":
             self.dl_feature_list = ["mean_nni"]
+        # read the feature list from a csv file in asset folder
         self.ml_feature_list = pd.read_csv(self.config.FEATURE_LIST)['feature_list'].values
         self.ml_feature_list = self.__build_feature_list__(self.modality, self.ml_feature_list)
 
@@ -65,19 +84,28 @@ class DataLoader(object):
             return ['mean_hr']
 
     @staticmethod
-    def cast_sleep_stages_and_onehot_encode(dataset, num_classes):
-        if len(dataset.shape) < 2 and len(set(dataset)) != num_classes:
-            dataset = cast_sleep_stages(dataset.astype(int), num_classes)
-            if len(dataset.shape) < 2:
-                dataset = np.expand_dims(dataset, -1)
+    def cast_sleep_stages_and_onehot_encode(labels, num_classes):
+        """
+        It converts an int-based list of sleep stages into a one-hot encoding matrix.
+        Args:
+            labels(list): a list of labels (GT) that should have the same size of train, test or val
+            num_classes(int): the number of sleep stages for a specific task
+        """
+        if len(labels.shape) < 2 and len(set(labels)) != num_classes:
+            labels = cast_sleep_stages(labels.astype(int), num_classes)
+            if len(labels.shape) < 2:
+                labels = np.expand_dims(labels, -1)
             enc = OneHotEncoder(handle_unknown='ignore')
-            dataset = enc.fit_transform(dataset).toarray()
+            labels = enc.fit_transform(labels).toarray()
             # dataset = tf.keras.utils.to_categorical(dataset, num_classes)
-            return dataset
+            return labels
         else:
-            return dataset
+            return labels
 
     def load_windowed_data(self):
+        """
+        return a
+        """
         # h5_file = self.config.HRV30_ACC_STD_PATH
         print("Loading h5 dataset from %s" % self.config.HRV30_ACC_STD_PATH)
         # _, dftest, featnames = load_h5_df_dataset(h5_file, useCache=True)

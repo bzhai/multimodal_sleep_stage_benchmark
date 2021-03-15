@@ -1,3 +1,18 @@
+"""
+Make Sense of Sleep: Perform deep learning experiments on benchmark models
+Copyright (C) 2020 Newcastle University, Bing Zhai
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import os
 import sys
 import argparse
@@ -65,7 +80,7 @@ def main(args):
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--nn_type', type=str, default="LSTM", help='define the neural network type')
-    parser.add_argument('--seq_len', type=int, default=100, help='the window length unit is sleep epochs')
+    parser.add_argument('--seq_len', type=int, default=100, help='the window length is sleep epochs')
     parser.add_argument('--modality', type=str, default="acc", help='the modality to use.')
     parser.add_argument('--num_classes', type=int, default=3, help='number of classes or labels')
     parser.add_argument('--training', type=int, default=1, help='training or predicting')

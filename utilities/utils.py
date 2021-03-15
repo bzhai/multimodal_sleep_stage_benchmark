@@ -22,21 +22,24 @@ from tqdm import tqdm
 from colorama import Fore
 from inspect import signature
 from sklearn.preprocessing import StandardScaler
+# import seaborn as sns
 
 
-
-def plot_bar_group_paper(total_df, metrics, win_len, output_path):
-    # https://seaborn.pydata.org/tutorial/color_palettes.html
-    for metric in metrics:
-        c_palette = sns.color_palette("colorblind", len(total_df.Algorithms.unique()))
-        rank = total_df[metric].argsort().argsort()
-        sns.set_context("paper")
-        sns.set_style("whitegrid")
-        g = sns.catplot(x="tasks", y=metric, hue="Algorithms", kind="bar", height=8, legend_out=False
-                    , data=total_df[['Algorithms', 'tasks', metric]], palette=c_palette)
-        g.set(xlabel='Tasks and classifiers')
-        g.set(ylim=(15, 100))
-        plt.savefig(os.path.join(output_path, metric + "_%ds_" % win_len + ".png"), dpi=200)
+# def plot_bar_group_paper(total_df, metrics, win_len, output_path):
+#     """
+#     Plot a
+#     """
+#     # https://seaborn.pydata.org/tutorial/color_palettes.html
+#     for metric in metrics:
+#         c_palette = sns.color_palette("colorblind", len(total_df.Algorithms.unique()))
+#         rank = total_df[metric].argsort().argsort()
+#         sns.set_context("paper")
+#         sns.set_style("whitegrid")
+#         g = sns.catplot(x="tasks", y=metric, hue="Algorithms", kind="bar", height=8, legend_out=False
+#                     , data=total_df[['Algorithms', 'tasks', metric]], palette=c_palette)
+#         g.set(xlabel='Tasks and classifiers')
+#         g.set(ylim=(15, 100))
+#         plt.savefig(os.path.join(output_path, metric + "_%ds_" % win_len + ".png"), dpi=200)
 
 
 def split_and_extract(x, index):
