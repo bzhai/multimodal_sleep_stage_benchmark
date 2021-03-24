@@ -9,18 +9,24 @@ class Config(object):
         self.HR_PATH = r"C:\tmp\sleep\opensource\annotations-rpoints"
         # download actigraphy data from MESA website and store it to here
         self.ACC_PATH = r"C:\tmp\sleep\opensource\actigraphy"
-        #
+        # A directory to store aligned "Actigraphy" and "RR interval" and extracted features
         self.CSV30_DATA_PATH = r"C:\tmp\sleep\opensource\HRV30s_ACC_CSV\Aligned_final"
+        # A file maps actigraphy and RR intervals by sleep epoch index
         self.OVERLAP_PATH = r"C:\tmp\sleep\opensource\mesa-actigraphy-psg-overlap.csv"
 
         # #################
+        # a directory for storing H5 files for train, val and test
         self.H5_OUTPUT_PATH = r"C:\tmp\sleep\opensource\HRV30s_ACC30s_H5"
+        # a standardrised H5 file contains all input features
         self.HRV30_ACC_STD_PATH = r"C:\tmp\sleep\opensource\HRV30s_ACC30s_H5\hrv30s_acc30s_full_feat_stand.h5"
+        # a standardrise transformer derived from training dataset
         self.STANDARDISER = {30: r"C:\tmp\sleep\opensource\HRV30s_ACC30s_H5\HRV30s_ACC30s_full_feat_stand.h5_std_transformer",
                              }
         # Deep learning H5 cache file for windowed data.
         self.NN_ACC_HRV = r"C:\tmp\sleep\opensource\HRV30s_ACC30s_H5\nn_acc_hrv30s_%d.h5"
+        # A feature list file that is corresponding to
         self.FEATURE_LIST = "../assets/feature_list.csv"
+        # the directory to store
         self.EXPERIMENT_RESULTS_ROOT_FOLDER = r"C:\tmp\sleep\opensource\Results"
 
 

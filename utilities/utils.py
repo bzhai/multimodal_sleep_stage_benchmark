@@ -65,16 +65,6 @@ def get_all_files_include_sub(path, file_type):
     return files
 
 
-def get_all_files_include_sub(path, file_type):
-    files = []
-    # r=root, d=directories, f = files
-    for r, d, f in os.walk(path):
-        for file in f:
-            if file_type in file:
-                files.append(os.path.join(os.path.abspath(r), file))
-    return files
-
-
 def plot_train_history(history, title):
   loss = history.history['loss']
   val_loss = history.history['val_loss']
