@@ -91,10 +91,11 @@ class DataLoader(object):
             labels(list): a list of labels (GT) that should have the same size of train, test or val
             num_classes(int): the number of sleep stages for a specific task
         """
-        if len(labels.shape) < 2 and len(set(labels)) != num_classes:
-            labels = cast_sleep_stages(labels.astype(int), num_classes)
-            if len(labels.shape) < 2:
-                labels = np.expand_dims(labels, -1)
+        if len(labels.shape) < 2:  # non non-hot encoding format
+            if len(set(labels)) != num_classes:
+                labels = cast_sleep_stages(labels.astype(int), num_classes)
+
+            labels = np.expand_dims(labels, -1)
             enc = OneHotEncoder(handle_unknown='ignore')
             labels = enc.fit_transform(labels).toarray()
             # dataset = tf.keras.utils.to_categorical(dataset, num_classes)
